@@ -56,6 +56,14 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+        <!-- Lombok -->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
