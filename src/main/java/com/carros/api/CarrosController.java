@@ -25,7 +25,7 @@ public class CarrosController {
 
     @GetMapping("/{id}")
     public ResponseEntity getCarroById(@PathVariable("id") Long id){
-        Optional<Carro> carro = carroService.getCarroById(id);
+        Optional<CarroDTO> carro = carroService.getCarroById(id);
 
         return carro.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -40,7 +40,7 @@ public class CarrosController {
 
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity<List<CarroDTO>> getCarrosByTipo(@PathVariable("tipo") String tipo){
-        List<Carro> carros = carroService.getCarroByTipo(tipo);
+        List<CarroDTO> carros = carroService.getCarroByTipo(tipo);
 
         return carros.isEmpty() ?
                 ResponseEntity.noContent().build() :
@@ -56,7 +56,7 @@ public class CarrosController {
 
     @PutMapping("/{id}")
     public String editarCarro(@PathVariable("id") Long id, @RequestBody Carro carro){
-        Carro c = carroService.update(carro, id);
+        CarroDTO c = carroService.update(carro, id);
 
         return "Atualizado";
     }

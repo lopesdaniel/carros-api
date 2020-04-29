@@ -24,30 +24,35 @@ public class CarroService {
 //            lista.add(new CarroDTO(c));
 //        }
 
-        List<CarroDTO> lista = carros.stream().map(c -> new CarroDTO(c)).collect(Collectors.toList());
+        return carros.stream().map(c -> CarroDTO.create(c)).collect(Collectors.toList());
 
-        return lista;
 
 //        return repository.findAll().stream().map(c -> new CarroDTO(c)).collect(Collectors.toList());
     }
 
 
-    public Optional<Carro> getCarroById(Long id) {
-        return repository.findById(id);
+    public Optional<CarroDTO> getCarroById(Long id) {
+        return repository.findById(id).map(CarroDTO::create);
     }
 
     public List<CarroDTO> getCarroByTipo(String tipo) {
-        return repository.findByTipo(tipo).stream().map(c -> new CarroDTO(c)).collect(Collectors.toList());
+        return repository.findByTipo(tipo).stream().map(c -> CarroDTO.create(c)).collect(Collectors.toList());
     }
 
-    public Carro save(Carro carro) {
+//    public CarroDTO save(Carro carro) {
+//        Assert.isNull(carro.getId(),"Não foi possível inserir o registro");
+//
+//        return CarroDTO.create(repository.save(carro));
+//    }
+
+    public Carro save(Carro carro){
         return repository.save(carro);
     }
 
-    public Carro update(Carro carro, Long id) {
+    public CarroDTO update(Carro carro, Long id) {
         Assert.notNull(id, "Não foi possível atualizar o registro");
 
-        Optional<Carro> optional = getCarroById(id);
+        Optional<Carro> optional = repository.findById(id);
         if(optional.isPresent()){
             Carro carBd = optional.get();
             carBd.setNome(carro.getNome());
@@ -55,7 +60,7 @@ public class CarroService {
 
             repository.save(carBd);
 
-            return carBd;
+            return CarroDTO.create(carBd);
         }else{
             throw new RuntimeException("Não foi possível atualizar o registro");
         }
@@ -63,8 +68,7 @@ public class CarroService {
     }
 
     public void delete(Long id) {
-        Optional<Carro> carro = getCarroById(id);
-        if(carro.isPresent()){
+        if(getCarroById(id).isPresent()){
             repository.deleteById(id);
         }
     }
